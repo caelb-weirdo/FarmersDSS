@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register - Farmer's Hub DSS</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="auth-container">
+      <div class="auth-card">
+        <div class="auth-header">
+          <div class="brand-mark-auth">FH</div>
+          <h1>Farmer's Hub DSS</h1>
+          <p class="auth-subtitle">Smart decisions for every harvest</p>
+        </div>
+
+        <form id="register-form" class="auth-form">
+          <div class="form-group">
+            <label for="register-fullname">Full Name</label>
+            <input
+              id="register-fullname"
+              type="text"
+              name="fullName"
+              placeholder="Your full name"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="register-email">Email Address</label>
+            <input
+              id="register-email"
+              type="email"
+              name="email"
+              placeholder="you@example.com"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="register-password">Password</label>
+            <input
+              id="register-password"
+              type="password"
+              name="password"
+              placeholder="At least 6 characters"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="register-password-confirm">Confirm Password</label>
+            <input
+              id="register-password-confirm"
+              type="password"
+              name="passwordConfirm"
+              placeholder="Confirm your password"
+              required
+            />
+          </div>
+
+          <button type="submit" class="primary-button">Create Account</button>
+
+          <p class="auth-error" id="register-error"></p>
+        </form>
+
+        <div class="auth-footer">
+          <p>
+            Already have an account?
+            <a href="login.html">Sign in</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script src="auth.js"></script>
+  </body>
+</html>

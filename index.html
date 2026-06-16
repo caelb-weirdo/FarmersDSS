@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Farmer's Hub DSS</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#dashboard" aria-label="Farmer's Hub DSS home">
+          <span class="brand-mark">FH</span>
+          <span>
+            <span class="brand-label">Farmer's Hub DSS</span>
+            <span class="brand-subtitle"
+              >Smart decisions for every harvest</span
+            >
+          </span>
+        </a>
+
+        <nav class="topnav" aria-label="Primary navigation">
+          <a href="#dashboard" class="active">Dashboard</a>
+          <a href="#crop-advisory">Crop Advisor</a>
+          <a href="#calculator">Calculator</a>
+          <a href="#market-watch">Market</a>
+        </nav>
+
+        <div class="topbar-actions">
+          <button class="icon-btn" id="warning-button" aria-label="View alerts">
+            !
+            <span class="badge" id="alert-count">2</span>
+          </button>
+          <div class="profile" id="profile-section">
+            <div class="avatar" id="profile-avatar">A</div>
+            <div class="profile-meta">
+              <p id="profile-name">User</p>
+              <span id="profile-role">Farmer</span>
+            </div>
+          </div>
+          <button class="outline-button" id="logout-button" aria-label="Logout">
+            Logout
+          </button>
+        </div>
+      </header>
+
+      <main class="pages">
+        <section id="dashboard" class="page active">
+          <div class="page-header">
+            <div>
+              <p class="eyebrow">Dashboard</p>
+              <h1>Welcome back, Farmer!</h1>
+              <p class="date-text" id="current-date">Loading date...</p>
+            </div>
+            <div class="status-pill">
+              <span class="status-dot"></span>
+              <span id="status-pill-text">System Online</span>
+            </div>
+          </div>
+
+          <div class="dashboard-grid">
+            <article class="panel weather-card">
+              <div class="weather-top">
+                <div>
+                  <p class="label">Live Weather</p>
+                  <h2 id="temp-value">29&deg;C</h2>
+                  <p class="weather-copy" id="weather-copy">
+                    Partly cloudy. Heavy rain expected tomorrow in Trincomalee.
+                  </p>
+                </div>
+                <div class="weather-icon" aria-hidden="true">
+                  <div class="sun"></div>
+                  <div class="cloud"></div>
+                </div>
+              </div>
+              <div class="advice-strip">
+                <strong id="weather-risk">Rain Risk: High</strong>
+                <span>Delay fertilizer application before heavy rain.</span>
+              </div>
+            </article>
+
+            <article class="panel decision-card">
+              <div class="card-header">
+                <p class="label">Today's DSS Advice</p>
+                <span>Auto summary</span>
+              </div>
+              <h2 id="daily-advice-title">
+                Paddy is currently the safest match
+              </h2>
+              <p id="daily-advice-text">
+                Based on Yala season, alluvial soil, irrigation water, and
+                strong market demand.
+              </p>
+              <div class="score-row">
+                <span>Recommendation confidence</span>
+                <strong id="daily-score">92%</strong>
+              </div>
+            </article>
+          </div>
+
+          <div class="quick-row">
+            <article class="metric-card">
+              <p class="label">Decision Alerts</p>
+              <strong id="warning-alerts">2 Critical Alerts</strong>
+              <span>Rain and pest monitoring</span>
+            </article>
+            <article class="metric-card">
+              <p class="label">Field Summary</p>
+              <strong id="field-summary-value">12 Active Fields</strong>
+              <span>6.8 acres under planning</span>
+            </article>
+            <article class="metric-card">
+              <p class="label">System Logs</p>
+              <strong id="system-logs-value">7 New Entries</strong>
+              <span>Updated market and weather data</span>
+            </article>
+          </div>
+        </section>
+
+        <section id="crop-advisory" class="page">
+          <div class="section-title">
+            <p class="eyebrow">Advisory</p>
+            <h1>Crop Advisory Engine</h1>
+          </div>
+
+          <div class="grid-two advisory-layout">
+            <article class="panel advisory-inputs">
+              <div class="card-header">
+                <p class="label">Input Panel</p>
+                <span>Change values and generate</span>
+              </div>
+
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="district">District</label>
+                  <select id="district">
+                    <option value="Trincomalee">Trincomalee</option>
+                    <option value="Anuradhapura">Anuradhapura</option>
+                    <option value="Jaffna">Jaffna</option>
+                    <option value="Kandy">Kandy</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="soil-type">Soil Type</label>
+                  <select id="soil-type">
+                    <option value="Alluvial">Alluvial</option>
+                    <option value="Laterite">Laterite</option>
+                    <option value="Sandy">Sandy</option>
+                    <option value="Clay">Clay</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="season-type">Current Season</label>
+                  <select id="season-type">
+                    <option value="Yala">Yala</option>
+                    <option value="Maha">Maha</option>
+                    <option value="Dry">Dry</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="water-source">Water Source</label>
+                  <select id="water-source">
+                    <option value="Irrigation">Irrigation</option>
+                    <option value="Rainfed">Rainfed</option>
+                    <option value="Groundwater">Groundwater</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="budget-level">Budget Level</label>
+                  <select id="budget-level">
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                    <option value="High">High</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="market-demand">Market Demand</label>
+                  <select id="market-demand">
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                  </select>
+                </div>
+              </div>
+
+              <button class="primary-button" id="generate-button">
+                Generate Recommendations
+              </button>
+            </article>
+
+            <article class="panel advisory-results">
+              <div class="card-header">
+                <p class="label">Best Match Crops</p>
+                <span id="recommendation-summary"
+                  >Top choices for current inputs</span
+                >
+              </div>
+              <div class="match-cards" id="crop-results"></div>
+            </article>
+          </div>
+
+          <article class="panel explanation-panel">
+            <div class="card-header">
+              <p class="label">Why This Recommendation?</p>
+              <span>Explainable DSS output</span>
+            </div>
+            <ul class="reason-list" id="reason-list"></ul>
+          </article>
+        </section>
+
+        <section id="calculator" class="page">
+          <div class="section-title">
+            <p class="eyebrow">Calculator</p>
+            <h1>Input & Fertilizer Calculator</h1>
+          </div>
+
+          <div class="calculator-top">
+            <div class="panel input-field">
+              <label for="target-crop">Target Crop</label>
+              <select id="target-crop">
+                <option value="Paddy">Paddy</option>
+                <option value="Maize">Maize</option>
+                <option value="Chili">Chili</option>
+                <option value="Red Onion">Red Onion</option>
+              </select>
+            </div>
+            <div class="panel input-field">
+              <label for="land-size">Land Size in Acres</label>
+              <input
+                id="land-size"
+                type="number"
+                min="0.25"
+                step="0.25"
+                value="2.5"
+              />
+            </div>
+          </div>
+
+          <article class="panel results-card">
+            <div class="card-header">
+              <p class="label">Required Fertilizer Dosage</p>
+              <span id="calculator-note">Calculated for 2.5 acres</span>
+            </div>
+            <div class="results-grid">
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Type</th>
+                      <th>Kilograms</th>
+                      <th>Application Schedule</th>
+                    </tr>
+                  </thead>
+                  <tbody id="fertilizer-body"></tbody>
+                </table>
+              </div>
+              <aside class="side-callout">
+                <strong id="cost-estimate">Estimated cost: LKR 0</strong>
+                <p id="fertilizer-tip">
+                  Apply during early morning for maximum absorption.
+                </p>
+              </aside>
+            </div>
+          </article>
+        </section>
+
+        <section id="market-watch" class="page">
+          <div class="section-title">
+            <p class="eyebrow">Market</p>
+            <h1>Live Crop Market Watch</h1>
+          </div>
+
+          <div class="grid-two market-layout">
+            <article class="panel pricing-panel">
+              <div class="card-header">
+                <p class="label">Local Market Prices</p>
+                <span>Current LKR/kg and weekly trends</span>
+              </div>
+              <div class="table-wrap">
+                <table class="price-table">
+                  <thead>
+                    <tr>
+                      <th>Crop</th>
+                      <th>Price</th>
+                      <th>Trend</th>
+                      <th>Demand</th>
+                    </tr>
+                  </thead>
+                  <tbody id="market-body"></tbody>
+                </table>
+              </div>
+            </article>
+
+            <article class="panel trend-panel">
+              <div class="card-header">
+                <p class="label">Profit Opportunity</p>
+                <span>Simple DSS ranking</span>
+              </div>
+              <div class="profit-list" id="profit-list"></div>
+            </article>
+          </div>
+        </section>
+      </main>
+
+      <div class="toast" id="toast" aria-live="polite"></div>
+
+      <div class="modal-overlay" id="modal-overlay" aria-hidden="true">
+        <div
+          class="modal-card"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="modal-title"
+        >
+          <button class="modal-close" id="modal-close" aria-label="Close modal">
+            x
+          </button>
+          <div class="modal-header">
+            <div class="modal-crop-icon" id="modal-icon"></div>
+            <div>
+              <p class="eyebrow">Growth Guide</p>
+              <h2 id="modal-title">Crop Growth Guide</h2>
+            </div>
+          </div>
+          <div class="modal-body">
+            <p id="modal-description"></p>
+            <ul id="modal-list"></ul>
+          </div>
+          <div class="modal-footer">
+            <button class="outline-button" id="modal-close-btn">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

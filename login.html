@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Farmer's Hub DSS</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="auth-container">
+      <div class="auth-card">
+        <div class="auth-header">
+          <div class="brand-mark-auth">FH</div>
+          <h1>Farmer's Hub DSS</h1>
+          <p class="auth-subtitle">Smart decisions for every harvest</p>
+        </div>
+
+        <form id="login-form" class="auth-form">
+          <div class="form-group">
+            <label for="login-email">Email Address</label>
+            <input
+              id="login-email"
+              type="email"
+              name="email"
+              placeholder="you@example.com"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="login-password">Password</label>
+            <input
+              id="login-password"
+              type="password"
+              name="password"
+              placeholder="Enter your password"
+              required
+            />
+          </div>
+
+          <button type="submit" class="primary-button">Sign In</button>
+
+          <p class="auth-error" id="login-error"></p>
+        </form>
+
+        <div class="auth-footer">
+          <p>
+            Don't have an account?
+            <a href="register.html">Create one</a>
+          </p>
+        </div>
+
+        <div class="demo-info">
+          <p><strong>Demo Credentials:</strong></p>
+          <p>Email: admin@farmer-dss.com or farmer@farmer-dss.com</p>
+          <p>Password: password123</p>
+        </div>
+      </div>
+    </div>
+
+    <script src="auth.js"></script>
+  </body>
+</html>
