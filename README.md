@@ -1,6 +1,6 @@
-# Farmer's Hub DSS
+# Farmer's DSS
 
-Farmer's Hub DSS is a simple decision support system for crop planning. It uses
+Farmer's DSS is a simple decision support system for crop planning. It uses
 HTML, CSS, vanilla JavaScript, PHP, and MySQL through XAMPP.
 
 ## Main Features
