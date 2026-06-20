@@ -29,6 +29,11 @@ function updateProfileUI() {
   document.getElementById("profile-avatar").textContent = firstLetter;
   document.getElementById("profile-name").textContent = currentUser.fullName;
   document.getElementById("profile-role").textContent = currentUser.role;
+  
+  if (currentUser.role === 'Admin') {
+    const navAdmin = document.getElementById("nav-admin");
+    if (navAdmin) navAdmin.style.display = 'block';
+  }
 }
 
 async function handleLogout() {
@@ -429,6 +434,74 @@ function renderMarket() {
   renderProfitRanking();
 }
 
+let adminMarketData = [];
+
+async function loadAdminMarket() {
+  try {
+    const data = await fetchJson(`${API_BASE}/admin_market.php`);
+    adminMarketData = data.marketPrices;
+    renderAdminMarket();
+  } catch (error) {
+    console.error("Failed to load admin market data:", error);
+  }
+}
+
+function renderAdminMarket() {
+  const body = document.getElementById("admin-market-body");
+  if (!body) return;
+  body.innerHTML = "";
+
+  adminMarketData.forEach((item) => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${item.id}</td>
+      <td><strong>${item.crop}</strong></td>
+      <td>
+        <input type="number" id="admin-price-${item.id}" value="${item.price}" class="admin-input-small" />
+      </td>
+      <td>
+        <select id="admin-trend-${item.id}" class="admin-input-small">
+          <option value="up" ${item.trend === 'up' ? 'selected' : ''}>Up</option>
+          <option value="down" ${item.trend === 'down' ? 'selected' : ''}>Down</option>
+          <option value="stable" ${item.trend === 'stable' ? 'selected' : ''}>Stable</option>
+        </select>
+      </td>
+      <td>
+        <select id="admin-demand-${item.id}" class="admin-input-small">
+          <option value="High" ${item.demand === 'High' ? 'selected' : ''}>High</option>
+          <option value="Medium" ${item.demand === 'Medium' ? 'selected' : ''}>Medium</option>
+          <option value="Low" ${item.demand === 'Low' ? 'selected' : ''}>Low</option>
+        </select>
+      </td>
+      <td>
+        <button class="outline-button" onclick="saveAdminMarket(${item.id})">Save</button>
+      </td>
+    `;
+    body.appendChild(row);
+  });
+}
+
+window.saveAdminMarket = async function(id) {
+  const price = document.getElementById(`admin-price-${id}`).value;
+  const trend = document.getElementById(`admin-trend-${id}`).value;
+  const demand = document.getElementById(`admin-demand-${id}`).value;
+
+  try {
+    await fetchJson(`${API_BASE}/admin_market.php`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, price, trend, demand }),
+    });
+    showToast("Market price updated successfully!");
+    
+    // Refresh public data to reflect changes immediately
+    await loadDataFromApi();
+    renderMarket();
+  } catch (error) {
+    showToast("Error updating price: " + error.message);
+  }
+};
+
 function renderProfitRanking() {
   const profitList = document.getElementById("profit-list");
   const ranked = cropRules
@@ -593,6 +666,11 @@ async function startApp() {
   renderMarket();
   renderFertilizerCalculator();
   await generateRecommendations(false);
+  
+  if (currentUser && currentUser.role === 'Admin') {
+    await loadAdminMarket();
+  }
+  
   bindEvents();
 
   const initialPage = window.location.hash.replace("#", "") || "dashboard";

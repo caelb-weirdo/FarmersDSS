@@ -116,3 +116,25 @@ const registerForm = document.getElementById("register-form");
 if (registerForm) {
   registerForm.addEventListener("submit", handleRegister);
 }
+
+// Handle password visibility toggle
+document.querySelectorAll('.password-toggle').forEach(button => {
+  button.addEventListener('click', function() {
+    // Find the input field within the same wrapper
+    const input = this.parentElement.querySelector('input');
+    const iconEye = this.querySelector('.icon-eye');
+    const iconEyeOff = this.querySelector('.icon-eye-off');
+    
+    if (input.type === 'password') {
+      input.type = 'text';
+      if (iconEye) iconEye.style.display = 'none';
+      if (iconEyeOff) iconEyeOff.style.display = 'block';
+      this.setAttribute('aria-label', 'Hide password');
+    } else {
+      input.type = 'password';
+      if (iconEye) iconEye.style.display = 'block';
+      if (iconEyeOff) iconEyeOff.style.display = 'none';
+      this.setAttribute('aria-label', 'Show password');
+    }
+  });
+});

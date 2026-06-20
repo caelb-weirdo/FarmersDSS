@@ -852,3 +852,145 @@ td {
     padding: 18px;
   }
 }
+
+/* ── Logo image styles ─────────────────────────────── */
+img.brand-logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 6px;
+  object-fit: cover;
+  display: block;
+}
+
+img.brand-logo-auth {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto 16px;
+}
+
+/* ── Alert modal ───────────────────────────────────── */
+.alert-modal-card {
+  border-top: 4px solid var(--warning);
+}
+
+.alert-icon {
+  display: grid;
+  place-items: center;
+  font-size: 1.6rem;
+  background: #fff9ed;
+  color: var(--warning);
+  border: 1px solid #ead7b0;
+}
+
+.alert-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.alert-list li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px 16px;
+  border-radius: 6px;
+  background: #fff9ed;
+  border-left: 4px solid var(--warning);
+}
+
+.alert-list li.alert-critical {
+  background: #fee2e2;
+  border-left-color: var(--danger);
+}
+
+.alert-list li .alert-badge {
+  flex: 0 0 auto;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: var(--warning);
+  color: #fff;
+}
+
+.alert-list li.alert-critical .alert-badge {
+  background: var(--danger);
+}
+
+.alert-list li .alert-text {
+  flex: 1;
+}
+
+.alert-list li .alert-text strong {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--text);
+}
+
+.alert-list li .alert-text span {
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+/* ── Weather loading state ─────────────────────────── */
+.weather-loading {
+  opacity: 0.55;
+  font-style: italic;
+}
+
+/* ── Admin Panel ───────────────────────────────────── */
+.admin-input-small {
+  width: 100%;
+  max-width: 140px;
+  min-height: 36px;
+  padding: 0 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text);
+  outline: none;
+  font-size: 0.9rem;
+}
+
+.admin-input-small:focus {
+  border-color: var(--warning);
+  box-shadow: 0 0 0 3px rgba(183, 121, 31, 0.12);
+}
+
+/* ── Password Toggle ───────────────────────────────── */
+.password-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input-wrap input {
+  padding-right: 40px; /* Make room for the eye icon */
+}
+
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-size: 1.1rem;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.password-toggle:hover {
+  opacity: 1;
+}
+

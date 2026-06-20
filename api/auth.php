@@ -8,7 +8,7 @@ require __DIR__ . '/db.php';
 
 const SESSION_TIMEOUT = 3600; // 1 hour
 
-function get_current_user(): ?array
+function get_logged_in_user(): ?array
 {
     if (empty($_SESSION['user_id'])) {
         return null;
@@ -32,7 +32,7 @@ function get_current_user(): ?array
 
 function is_authenticated(): bool
 {
-    return get_current_user() !== null;
+    return get_logged_in_user() !== null;
 }
 
 function require_auth(): void
@@ -49,7 +49,7 @@ function require_auth(): void
 
 function require_admin(): void
 {
-    $user = get_current_user();
+    $user = get_logged_in_user();
     if ($user === null || $user['role'] !== 'Admin') {
         http_response_code(403);
         echo json_encode([

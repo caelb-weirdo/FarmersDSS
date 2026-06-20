@@ -24,6 +24,7 @@
           <a href="#crop-advisory">Crop Advisor</a>
           <a href="#calculator">Calculator</a>
           <a href="#market-watch">Market</a>
+          <a href="#admin-panel" id="nav-admin" style="display: none;">Admin Panel</a>
         </nav>
 
         <div class="topbar-actions">
@@ -299,6 +300,37 @@
               <div class="profit-list" id="profit-list"></div>
             </article>
           </div>
+        </section>
+
+        <section id="admin-panel" class="page">
+          <div class="section-title">
+            <p class="eyebrow">Admin</p>
+            <h1>Manage Market Prices</h1>
+          </div>
+
+          <article class="panel">
+            <div class="card-header">
+              <p class="label">Live Market Prices</p>
+              <span>Update prices, demand, and trends</span>
+            </div>
+            <div class="table-wrap">
+              <table class="price-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Crop</th>
+                    <th>Price per kg (LKR)</th>
+                    <th>Trend</th>
+                    <th>Demand</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-market-body">
+                  <!-- Rendered via JS -->
+                </tbody>
+              </table>
+            </div>
+          </article>
         </section>
       </main>
 

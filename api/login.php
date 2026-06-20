@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
     }
 } elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $user = get_current_user();
+    $user = get_logged_in_user();
 
     if ($user) {
         echo json_encode([
