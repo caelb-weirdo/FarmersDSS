@@ -664,6 +664,120 @@ function showPage(pageId) {
   history.replaceState(null, "", `#${safePageId}`);
 }
 
+async function handleAddCrop(event) {
+  event.preventDefault();
+  
+  const cropName = document.getElementById("add-crop-name").value.trim();
+  const duration = document.getElementById("add-crop-duration").value.trim();
+  const profitScore = parseInt(document.getElementById("add-crop-profit").value);
+  const price = parseFloat(document.getElementById("add-crop-price").value);
+  const trend = document.getElementById("add-crop-trend").value;
+  const budgetLevel = document.getElementById("add-crop-budget").value;
+  const marketDemand = document.getElementById("add-crop-demand").value;
+  const guide = document.getElementById("add-crop-guide").value;
+
+  // Checkboxes
+  const checkedSoils = Array.from(document.querySelectorAll('input[name="best_soils"]:checked')).map(el => el.value);
+  const checkedSeasons = Array.from(document.querySelectorAll('input[name="best_seasons"]:checked')).map(el => el.value);
+  const checkedWater = Array.from(document.querySelectorAll('input[name="best_water"]:checked')).map(el => el.value);
+
+  if (checkedSoils.length === 0) {
+    showToast("Please select at least one soil type.");
+    return;
+  }
+  if (checkedSeasons.length === 0) {
+    showToast("Please select at least one season.");
+    return;
+  }
+  if (checkedWater.length === 0) {
+    showToast("Please select at least one water source.");
+    return;
+  }
+
+  // Fertilizers
+  const fertilizers = [
+    {
+      type: "Urea",
+      kgPerAcre: parseFloat(document.getElementById("fertilizer-urea-kg").value) || 0,
+      pricePerKg: parseFloat(document.getElementById("fertilizer-urea-price").value) || 320,
+      schedule: document.getElementById("fertilizer-urea-schedule").value.trim()
+    },
+    {
+      type: "MOP",
+      kgPerAcre: parseFloat(document.getElementById("fertilizer-mop-kg").value) || 0,
+      pricePerKg: parseFloat(document.getElementById("fertilizer-mop-price").value) || 360,
+      schedule: document.getElementById("fertilizer-mop-schedule").value.trim()
+    },
+    {
+      type: "TSP",
+      kgPerAcre: parseFloat(document.getElementById("fertilizer-tsp-kg").value) || 0,
+      pricePerKg: parseFloat(document.getElementById("fertilizer-tsp-price").value) || 420,
+      schedule: document.getElementById("fertilizer-tsp-schedule").value.trim()
+    },
+    {
+      type: "Compost",
+      kgPerAcre: parseFloat(document.getElementById("fertilizer-compost-kg").value) || 0,
+      pricePerKg: parseFloat(document.getElementById("fertilizer-compost-price").value) || 35,
+      schedule: document.getElementById("fertilizer-compost-schedule").value.trim()
+    }
+  ].filter(f => f.kgPerAcre > 0);
+
+  const payload = {
+    action: 'add',
+    crop_name: cropName,
+    duration: duration,
+    profit_score: profitScore,
+    price: price,
+    trend: trend,
+    budget_level: budgetLevel,
+    market_demand: marketDemand,
+    guide: guide,
+    best_soils: checkedSoils.join(","),
+    best_seasons: checkedSeasons.join(","),
+    best_water: checkedWater.join(","),
+    fertilizers: fertilizers
+  };
+
+  const submitBtn = document.getElementById("add-crop-submit-btn");
+  const originalText = submitBtn.textContent;
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Adding Crop...";
+
+  try {
+    const data = await fetchJson(`${API_BASE}/admin_market.php`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    showToast("Crop and all details added successfully!");
+    document.getElementById("admin-add-crop-form").reset();
+    
+    // Refresh tables and recommendation lists immediately
+    await loadDataFromApi();
+    renderMarket();
+    
+    // Dynamically update Calculator target crop dropdown options
+    const targetCropSelect = document.getElementById("target-crop");
+    if (targetCropSelect) {
+      // Clear and re-populate crop option list
+      targetCropSelect.innerHTML = cropRules.map(c => `<option value="${c.crop}">${c.crop}</option>`).join("");
+      renderFertilizerCalculator();
+    }
+    
+    await generateRecommendations(false);
+    
+    if (currentUser && currentUser.role === 'Admin') {
+      await loadAdminMarket();
+    }
+  } catch (error) {
+    showToast("Error: " + error.message);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalText;
+  }
+}
+
 function bindEvents() {
   document.querySelectorAll(".topnav a, .brand").forEach((link) => {
     link.addEventListener("click", (event) => {
@@ -738,6 +852,11 @@ function bindEvents() {
   document.getElementById("alert-modal-overlay").addEventListener("click", (e) => {
     if (e.target.id === "alert-modal-overlay") closeAlertModal();
   });
+
+  const addCropForm = document.getElementById("admin-add-crop-form");
+  if (addCropForm) {
+    addCropForm.addEventListener("submit", handleAddCrop);
+  }
 }
 
 function openAlertModal() {

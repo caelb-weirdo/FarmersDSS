@@ -994,3 +994,64 @@ img.brand-logo-auth {
   opacity: 1;
 }
 
+/* Admin Add Crop Form Styles */
+.admin-add-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 15px;
+}
+
+.admin-add-form .form-section-title {
+  margin-top: 1.5rem;
+  font-weight: 700;
+  color: var(--accent);
+  border-bottom: 2px solid var(--accent-soft);
+  padding-bottom: 6px;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+}
+
+.checkbox-options label {
+  transition: color 0.2s;
+  cursor: pointer;
+}
+
+.checkbox-options label:hover {
+  color: var(--accent);
+}
+
+.checkbox-options input[type="checkbox"] {
+  cursor: pointer;
+  accent-color: var(--accent);
+}
+
+.fertilizer-name-badge {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--accent-dark);
+  background: var(--accent-soft);
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  border-radius: 6px;
+  text-align: center;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);
+}
+
+.fertilizer-row-input input {
+  transition: all 0.2s ease;
+}
+
+.fertilizer-row-input input:focus {
+  border-color: var(--accent);
+}
+
+.admin-add-form textarea {
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.admin-add-form textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(47, 125, 63, 0.12);
+}
+
