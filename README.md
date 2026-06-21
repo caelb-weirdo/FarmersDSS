@@ -1,71 +1,57 @@
 # Farmar's DSS
 
-Farmar's DSS is a simple decision support system for crop planning. It uses
-HTML, CSS, vanilla JavaScript, PHP, and MySQL through XAMPP.
+Farmar's DSS is a simple Decision Support System for crop planning, built with
+plain PHP, HTML, CSS, JavaScript, and MySQL — running on XAMPP. It uses a
+traditional server-side PHP architecture so the code is easy for beginners to
+read and understand.
 
 ## Main Features
 
-- **User Authentication**: Login and registration system with email/password authentication.
-- **Role-Based Access**: Support for Farmer and Admin user roles.
-- **Admin Panel**: Role-based Admin dashboard to manage and update crops, fertilizer rules, and market prices directly from the browser UI.
-- **Real-Time Weather**: Integration with a real weather API (Open-Meteo) for live weather conditions and dynamic agricultural recommendations.
-- **Show/Hide Password**: Modern password toggle with SVG icons on Login and Register pages.
-- **Responsive dashboard** with weather, alerts, field summary, and DSS advice.
-- **Crop recommendation engine** using soil, season, water source, budget, and market demand.
-- **Clear explanation** for each recommendation.
-- **Fertilizer calculator** based on selected crop and land size.
-- **Market price section** with demand and trend data.
-- **MySQL database support** using PHP API files.
-- **Fallback demo data** in JavaScript, so the interface still works without MySQL.
+- **Secure Login & Registration** — Email and password authentication with bcrypt hashing. Sessions are managed entirely by PHP.
+- **Role-Based Access** — Two roles: `Farmer` and `Admin`. Admin users see an extra Admin Panel tab.
+- **Dashboard** — Personalized welcome, live weather card, daily DSS advice, and metric summary cards.
+- **Live Weather (All Districts)** — Fetches real-time weather for Trincomalee, Anuradhapura, Jaffna, and Kandy from the Open-Meteo API.
+- **Crop Advisory Engine** — Select your district, soil type, season, water source, budget, and market demand. The PHP backend scores all crops and shows the top 3 matches with an explanation.
+- **Fertilizer Calculator** — Select a crop and land size. JavaScript instantly shows required fertilizer kg and estimated total cost in LKR.
+- **Market Watch** — Live table of crop prices, demand levels, and price trends loaded directly from MySQL.
+- **Admin Panel** — Admins can update market prices and add entirely new crops (with suitability rules, growth guides, and fertilizer dosages) without touching the database directly.
 
 ## Technology Used
 
+- PHP 7+
+- MySQL
 - HTML5
 - CSS3
-- Vanilla JavaScript
-- PHP
-- MySQL
+- Vanilla JavaScript (minimal, ~180 lines)
 - XAMPP
 
 ## Folder Structure
 
 ```text
 FarmerDSS/
-  api/
-    admin_market.php
-    auth.php
-    data.php
-    db.php
-    login.php
-    logout.php
-    recommend.php
-    register.php
-  database.sql
-  auth.js
-  index.html
-  login.html
-  register.html
-  script.js
-  styles.css
+  db.php           — Database connection and auth helper functions
+  index.php        — Main application (all pages in one file)
+  login.php        — Login form and POST handler
+  register.php     — Registration form and POST handler
+  logout.php       — Destroys session and redirects to login
+  script.js        — Minimal JS: tab navigation, weather API, calculator
+  styles.css       — Responsive visual design
+  database.sql     — MySQL schema and sample data
   README.md
+  PROJECT_REPORT.md
 ```
 
 ## XAMPP Setup
 
 1. Copy the `FarmerDSS` folder into your XAMPP `htdocs` folder.
 
-Example:
-
 ```text
 C:\xampp\htdocs\FarmerDSS
 ```
 
-2. Start XAMPP Control Panel.
+2. Open the XAMPP Control Panel.
 
-3. Start:
-
-- Apache
-- MySQL
+3. Start **Apache** and **MySQL**.
 
 4. Open phpMyAdmin:
 
@@ -74,219 +60,102 @@ http://localhost/phpmyadmin
 ```
 
 5. Import the database:
+   - Click **New** on the left sidebar, name it `farmer_dss`, then click **Create**.
+   - Select the new `farmer_dss` database.
+   - Click the **Import** tab at the top.
+   - Choose the `database.sql` file from the project folder.
+   - Click **Go**.
 
-- Click **Import**
-- Choose `database.sql`
-- Click **Go**
-
-This creates the `farmer_dss` database and sample tables/data.
-
-6. Open the project in your browser:
+6. Open the project:
 
 ```text
-http://localhost/FarmerDSS/index.html
+http://localhost/FarmerDSS/login.php
 ```
 
-You will be redirected to the login page. Use the demo credentials below to log in.
+## Demo Credentials
 
-## Authentication & Demo Credentials
+| Role   | Email                     | Password    |
+| ------ | ------------------------- | ----------- |
+| Admin  | admin@gmail.com           | admin@123   |
+| Farmer | farmer@farmer-dss.com     | password123 |
 
-The system uses email/password authentication with session-based login.
+All new registrations through the Register page default to the **Farmer** role.
 
-**Demo Users:**
+## How the Architecture Works
 
-- **Admin Account**: admin@gmail.com | Password: admin@123
-- **Farmer Account**: farmer@farmer-dss.com | Password: password123
+This project uses **Traditional Server-Side PHP Rendering**. There is no separate
+`api/` folder and no complex JavaScript data loading.
 
-**Create a New Account:**
+**Flow:**
 
-Visit the registration page to create a new account. All new registrations default to the "Farmer" role.
+1. User opens `login.php`. PHP processes the form submission and creates a session.
+2. PHP redirects to `index.php`.
+3. At the top of `index.php`, PHP connects to MySQL, runs all queries, and stores results in PHP arrays.
+4. The HTML below uses simple `<?php foreach() ?>` loops to build the tables and cards directly.
+5. When the user clicks **Generate Recommendations**, the form submits via `POST` back to `index.php`. PHP scores the crops server-side and re-renders the page with results.
+6. JavaScript only handles: live tab switching, calling the Open-Meteo weather API, and performing fertilizer calculation math in real-time (without a page reload).
 
 ## Database Tables
 
-### users
-
-Stores user account information.
-
-Fields:
-
-- `email` - Unique email address (login credential)
-- `password_hash` - Bcrypt-hashed password
-- `full_name` - User's full name
-- `role` - Enum: 'Farmer' or 'Admin'
-- `created_at` - Account creation timestamp
-
-### crops
-
-Stores crop rules used by the recommendation engine.
-
-Important fields:
-
-- `crop_name`
-- `best_soils`
-- `best_seasons`
-- `best_water`
-- `budget_level`
-- `market_demand`
-- `duration`
-- `profit_score`
-
-### crop_guides
-
-Stores growth guide points for each crop.
-
-### fertilizer_rules
-
-Stores fertilizer type, kg per acre, price per kg, and application schedule.
-
-### market_prices
-
-Stores current crop prices, demand level, and price trend.
-
-### weather_alerts
-
-Stores district-based weather information and alert count.
-
-### recommendation_history
-
-Stores generated recommendations when the user clicks **Generate Recommendations**.
+| Table                  | Purpose                                         |
+| ---------------------- | ----------------------------------------------- |
+| users                  | User accounts, hashed passwords, roles          |
+| crops                  | Crop suitability rules for the advisory engine  |
+| crop_guides            | Step-by-step growth guide points per crop       |
+| fertilizer_rules       | Fertilizer type, kg/acre, price/kg, schedule    |
+| market_prices          | Current prices, demand, and trend per crop      |
+| weather_alerts         | District weather data (legacy/backup)           |
+| recommendation_history | Log of generated recommendation records         |
 
 ## How the Recommendation Logic Works
 
-The system starts each crop with a base score of `40`.
+Each crop starts with a base score of `40`. Points are added based on how well
+the user's inputs match each crop's stored suitability rules.
 
-Then it adds points:
+| Condition           | Points |
+| ------------------- | -----: |
+| Soil type match     |    +15 |
+| Season match        |    +15 |
+| Water source match  |    +15 |
+| Budget match        |     +8 |
+| Market demand match |     +7 |
 
-- Soil type match: `+15`
-- Season match: `+15`
-- Water source match: `+15`
-- Budget level match: `+8`
-- Market demand match: `+7`
+Maximum score is capped at 100. The top 3 crops are displayed.
 
-The crop with the highest score becomes the best recommendation.
+**Example:**
 
-Example:
+```
+Input: Alluvial soil, Yala season, Irrigation water, Medium budget, High demand
 
-```text
-Input:
-Soil: Alluvial
-Season: Yala
-Water: Irrigation
-Budget: Medium
-Demand: High
-
-Output:
-Paddy may score highest because it matches soil, season, water, budget, and demand.
+Result: Paddy scores 95 because it matches all five conditions.
 ```
 
-## PHP API Files
+## Database Connection Settings
 
-### api/admin_market.php
-
-Handles Admin role operations for updating and managing crops, fertilizer rules, and market prices in the database.
-
-### api/db.php
-
-Connects PHP to MySQL.
-
-Default XAMPP settings:
+The database connection is in `db.php`:
 
 ```php
 $host = 'localhost';
-$database = 'farmer_dss';
-$username = 'root';
-$password = '';
+$db   = 'farmer_dss';
+$user = 'root';
+$pass = '';
 ```
 
-If your MySQL password is different, update this file.
-
-### api/auth.php
-
-Session management and authentication utilities. Provides:
-
-- `get_current_user()` - Returns logged-in user or null
-- `is_authenticated()` - Boolean check for active session
-- `require_auth()` - Exit with 401 if not authenticated
-- `require_admin()` - Exit with 403 if not an admin
-
-### api/login.php
-
-Handles user login and session initialization.
-
-**POST Request:**
-
-```json
-{
-  "email": "user@example.com",
-  "password": "password123"
-}
-```
-
-**GET Request:** Returns current user information if authenticated.
-
-### api/register.php
-
-Handles user registration with email validation and password hashing.
-
-**POST Request:**
-
-```json
-{
-  "email": "user@example.com",
-  "password": "password123",
-  "fullName": "John Doe"
-}
-```
-
-Validates:
-
-- Email format
-- Password minimum 6 characters
-- Full name minimum 2 characters
-- No duplicate email registration
-
-### api/logout.php
-
-Destroys the session and logs out the user.
-
-### api/data.php
-
-Returns crops, fertilizer rules, market data, and weather data as JSON.
-
-### api/recommend.php
-
-Receives user inputs from JavaScript, calculates crop scores in PHP, saves the
-best recommendation to `recommendation_history`, and returns the results as JSON.
-
-## JavaScript Fetch Connection
-
-The frontend uses `fetch()` to load data:
-
-```js
-fetch("api/data.php");
-```
-
-When the user clicks **Generate Recommendations**, it sends inputs to:
-
-```js
-fetch("api/recommend.php");
-```
-
-If XAMPP or MySQL is not running, the system uses the local demo data in
-`script.js`.
+If your MySQL password is different, update `db.php`.
 
 ## Future Improvements
 
 - Add email verification for new registrations.
-- Add "Remember Me" login option with persistent tokens.
-- Add field profile management for users.
-- Add printable recommendation report.
+- Add password reset by email.
+- Add a "Remember Me" persistent login option.
+- Add printable or downloadable recommendation reports.
 - Add charts for market price history.
-- Add password reset functionality.
+- Add more districts and crop varieties.
 
 ## Project Notes
 
-This project is intentionally built with simple code so it is easy to understand
-and explain. The logic is not hidden inside a framework. HTML controls the
-structure, CSS controls the design, JavaScript controls the interface behavior,
-and PHP/MySQL stores and processes DSS data.
+This project is intentionally built with plain, simple code so that any HNDIT
+student can open a file, read it top to bottom, and understand exactly what it
+does. There are no hidden frameworks or complex build tools. HTML controls the
+structure, CSS controls the design, JavaScript handles the live weather and
+calculator, and PHP with MySQL does all the database work.
