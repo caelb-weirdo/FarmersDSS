@@ -1,8 +1,8 @@
-# Farmar's DSS Project Report
+# Farmars DSS Project Report
 
 ## Project Title
 
-Farmar's Decision Support System (Farmar's DSS)
+Farmars Decision Support System (Farmar's DSS)
 
 ## Problem Statement
 
