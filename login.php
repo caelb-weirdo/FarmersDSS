@@ -63,6 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <label for="login-password">Password</label>
             <div class="password-input-wrap">
               <input id="login-password" type="password" name="password" placeholder="Enter your password" required />
+              <button type="button" class="password-toggle" aria-label="Show password">👁️</button>
             </div>
           </div>
 

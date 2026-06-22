@@ -82,6 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <label for="register-password">Password</label>
             <div class="password-input-wrap">
               <input id="register-password" type="password" name="password" placeholder="Create a password" required />
+              <button type="button" class="password-toggle" aria-label="Show password">👁️</button>
             </div>
           </div>
 
@@ -89,6 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <label for="register-password-confirm">Confirm Password</label>
             <div class="password-input-wrap">
               <input id="register-password-confirm" type="password" name="passwordConfirm" placeholder="Confirm your password" required />
+              <button type="button" class="password-toggle" aria-label="Show password">👁️</button>
             </div>
           </div>
 

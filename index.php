@@ -9,10 +9,10 @@ $messageType = 'success';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     if ($_POST['action'] === 'update_price') {
         requireAdmin();
-        $id = (int)$_POST['id'];
-        $price = (float)$_POST['price'];
-        $trend = $_POST['trend'];
-        $demand = $_POST['demand'];
+        $id     = (int)$_POST['id'];
+        $price  = (float)$_POST['price'];
+        $trend  = in_array($_POST['trend'],  ['up','down','stable'])         ? $_POST['trend']  : 'stable';
+        $demand = in_array($_POST['demand'], ['High','Medium','Low'])         ? $_POST['demand'] : 'Medium';
         
         $stmt = $pdo->prepare('UPDATE market_prices SET price_per_kg = ?, trend = ?, demand = ? WHERE id = ?');
         $stmt->execute([$price, $trend, $demand, $id]);
@@ -187,8 +187,8 @@ usort($rankedMarkets, function($a, $b) { return $b['finalScore'] - $a['finalScor
         // Pass essential data to minimal JS
         var fertilizerRules = <?php echo json_encode($fertilizerRules); ?>;
         var cropGuides = <?php echo json_encode($crops); ?>;
-        var START_PAGE = "<?php echo (isset($_POST['action']) && $_POST['action'] === 'recommend') ? 'crop-advisory' : ((isset($_POST['action']) && ($_POST['action'] === 'update_price' || $_POST['action'] === 'add_crop')) ? 'admin-panel' : 'dashboard'); ?>";
-        var PHP_MESSAGE = "<?php echo htmlspecialchars($message); ?>";
+        var START_PAGE = <?php echo json_encode((isset($_POST['action']) && $_POST['action'] === 'recommend') ? 'crop-advisory' : ((isset($_POST['action']) && ($_POST['action'] === 'update_price' || $_POST['action'] === 'add_crop')) ? 'admin-panel' : 'dashboard')); ?>;
+        var PHP_MESSAGE = <?php echo json_encode($message); ?>;
     </script>
   </head>
   <body>
@@ -207,6 +207,7 @@ usort($rankedMarkets, function($a, $b) { return $b['finalScore'] - $a['finalScor
           <a href="#crop-advisory" onclick="showPage('crop-advisory'); return false;">Crop Advisor</a>
           <a href="#calculator" onclick="showPage('calculator'); return false;">Calculator</a>
           <a href="#market-watch" onclick="showPage('market-watch'); return false;">Market</a>
+          <a href="#how-it-works" onclick="showPage('how-it-works'); return false;">How It Works</a>
           <?php if (isAdmin()): ?>
           <a href="#admin-panel" onclick="showPage('admin-panel'); return false;">Admin Panel</a>
           <?php endif; ?>
@@ -717,7 +718,184 @@ usort($rankedMarkets, function($a, $b) { return $b['finalScore'] - $a['finalScor
           </article>
         </section>
         <?php endif; ?>
+
+        <!-- HOW IT WORKS -->
+        <section id="how-it-works" class="page">
+          <div class="section-title">
+            <div>
+              <p class="eyebrow">Guide</p>
+              <h1>How It Works</h1>
+            </div>
+            <span style="font-size:0.82rem; color:var(--muted);">Your step-by-step DSS walkthrough</span>
+          </div>
+
+          <!-- Hero strip -->
+          <div class="hiw-hero">
+            <div class="hiw-hero-text">
+              <h2>Smart farming decisions, <span class="hiw-accent">powered by data</span></h2>
+              <p>Farmar's DSS combines real-time weather, crop science, and market intelligence into one easy-to-use platform — helping you decide <em>what to grow, when to grow it, and how much to spend</em>.</p>
+            </div>
+            <div class="hiw-hero-badge">
+              <div class="hiw-badge-ring">
+                <span class="hiw-badge-icon">🌾</span>
+              </div>
+              <p>Decision Support System</p>
+            </div>
+          </div>
+
+          <!-- Steps -->
+          <div class="hiw-steps-title">
+            <p class="eyebrow">The Process</p>
+            <h2>5 Simple Steps</h2>
+          </div>
+          <div class="hiw-steps">
+            <div class="hiw-step">
+              <div class="hiw-step-num">1</div>
+              <div class="hiw-step-body">
+                <h3>Log In to Your Account</h3>
+                <p>Create a free Farmer account or sign in with your credentials. Admins have extra controls for managing market data and crops.</p>
+              </div>
+            </div>
+            <div class="hiw-step">
+              <div class="hiw-step-num">2</div>
+              <div class="hiw-step-body">
+                <h3>Check Live Weather on the Dashboard</h3>
+                <p>The Dashboard fetches real-time weather for all 4 districts via Open-Meteo. If rain is forecast, the system flags a critical alert automatically.</p>
+              </div>
+            </div>
+            <div class="hiw-step">
+              <div class="hiw-step-num">3</div>
+              <div class="hiw-step-body">
+                <h3>Generate a Crop Recommendation</h3>
+                <p>Go to <strong>Crop Advisor</strong>, select your district, soil type, season, water source, budget, and expected market demand — then click <em>Generate Recommendations</em>. The engine scores every crop against your inputs and ranks the top matches.</p>
+              </div>
+            </div>
+            <div class="hiw-step">
+              <div class="hiw-step-num">4</div>
+              <div class="hiw-step-body">
+                <h3>Calculate Your Fertilizer &amp; Costs</h3>
+                <p>Head to the <strong>Calculator</strong> tab, pick your crop and land size. The system instantly shows required fertilizer quantities (Urea, MOP, TSP, Compost) and estimates the total cost in LKR.</p>
+              </div>
+            </div>
+            <div class="hiw-step">
+              <div class="hiw-step-num">5</div>
+              <div class="hiw-step-body">
+                <h3>Track the Market &amp; Sell Smart</h3>
+                <p>The <strong>Market Watch</strong> tab shows live LKR/kg prices, weekly trends, and a DSS profit-opportunity ranking — so you know the best time to sell your harvest.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Feature cards -->
+          <div class="hiw-features-title" style="margin-top:2.5rem;">
+            <p class="eyebrow">Features</p>
+            <h2>What Each Section Does</h2>
+          </div>
+          <div class="hiw-features">
+            <article class="hiw-feature-card">
+              <div class="hiw-feature-icon" style="background:#edf7ed; color:#1f5f30;">📊</div>
+              <h3>Dashboard</h3>
+              <p>Live weather for every district, today's top crop recommendation, system alerts, and a full weather overview grid — all in one glance.</p>
+            </article>
+            <article class="hiw-feature-card">
+              <div class="hiw-feature-icon" style="background:#fef3c7; color:#92400e;">🌱</div>
+              <h3>Crop Advisor</h3>
+              <p>AI-style rule-based recommendation engine. Scores each crop out of 100 based on soil, season, water, budget, and demand. Tap any card to read the full growth guide.</p>
+            </article>
+            <article class="hiw-feature-card">
+              <div class="hiw-feature-icon" style="background:#ede9fe; color:#4c1d95;">🧮</div>
+              <h3>Calculator</h3>
+              <p>Instant fertilizer dosage calculator. Change crop or land size and the table updates live — no page reload. Includes estimated LKR cost.</p>
+            </article>
+            <article class="hiw-feature-card">
+              <div class="hiw-feature-icon" style="background:#fee2e2; color:#b91c1c;">📈</div>
+              <h3>Market Watch</h3>
+              <p>Up/Down/Stable price trends, current LKR/kg rates, and a profit-opportunity ranking that factors in both crop profit score and market trend.</p>
+            </article>
+            <article class="hiw-feature-card">
+              <div class="hiw-feature-icon" style="background:#dbeafe; color:#1e40af;">⚠️</div>
+              <h3>Decision Alerts</h3>
+              <p>The alert badge counts districts with high rain risk. Click the <strong>!</strong> button to view district-by-district warnings and recommended actions.</p>
+            </article>
+            <article class="hiw-feature-card">
+              <div class="hiw-feature-icon" style="background:#f0fdf4; color:#166534;">🔐</div>
+              <h3>Admin Panel</h3>
+              <p>Admins can update live market prices, trends, and demand levels, and add entirely new crops complete with guides, fertilizer rules, and market data.</p>
+            </article>
+          </div>
+
+          <!-- CTA -->
+          <div class="hiw-cta">
+            <h2>Ready to make smarter farming decisions?</h2>
+            <p>Go to the Crop Advisor and generate your first recommendation in under 30 seconds.</p>
+            <button class="primary-button hiw-cta-btn" onclick="showPage('crop-advisory')">
+              Open Crop Advisor →
+            </button>
+          </div>
+        </section>
       </main>
+
+      <!-- Footer -->
+      <footer class="site-footer">
+        <div class="footer-inner">
+          <div class="footer-brand">
+            <img src="logo.png" alt="Farmar's DSS Logo" class="footer-logo" />
+            <div>
+              <span class="footer-brand-name">Farmar's DSS</span>
+              <span class="footer-tagline">Smart decisions for every harvest</span>
+            </div>
+          </div>
+
+          <div class="footer-links">
+            <span class="footer-section-label">Navigate</span>
+            <a href="#dashboard"    onclick="showPage('dashboard');    return false;">Dashboard</a>
+            <a href="#crop-advisory" onclick="showPage('crop-advisory'); return false;">Crop Advisor</a>
+            <a href="#calculator"   onclick="showPage('calculator');   return false;">Calculator</a>
+            <a href="#market-watch" onclick="showPage('market-watch'); return false;">Market Watch</a>
+            <a href="#how-it-works" onclick="showPage('how-it-works'); return false;">How It Works</a>
+          </div>
+
+          <div class="footer-contact">
+            <span class="footer-section-label">Contact Us</span>
+            <div class="footer-socials">
+              <!-- Facebook -->
+              <a href="https://facebook.com" target="_blank" rel="noopener" class="social-btn social-fb" aria-label="Facebook">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+              </a>
+              <!-- Instagram -->
+              <a href="https://instagram.com" target="_blank" rel="noopener" class="social-btn social-ig" aria-label="Instagram">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              </a>
+              <!-- Twitter / X -->
+              <a href="https://twitter.com" target="_blank" rel="noopener" class="social-btn social-x" aria-label="Twitter / X">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+              </a>
+              <!-- LinkedIn -->
+              <a href="https://linkedin.com" target="_blank" rel="noopener" class="social-btn social-li" aria-label="LinkedIn">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+              </a>
+              <!-- WhatsApp -->
+              <a href="https://wa.me/94000000000" target="_blank" rel="noopener" class="social-btn social-wa" aria-label="WhatsApp">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.93 0C5.354 0 0 5.354 0 11.93c0 2.1.549 4.07 1.508 5.778L0 24l6.444-1.688A11.9 11.9 0 0 0 11.93 23.86C18.508 23.86 24 18.508 24 11.93 24 5.354 18.508 0 11.93 0zm0 21.785a9.837 9.837 0 0 1-5.015-1.374l-.36-.214-3.727.977.995-3.635-.235-.374A9.854 9.854 0 0 1 2.143 11.93c0-5.4 4.394-9.793 9.787-9.793 5.4 0 9.788 4.394 9.788 9.793 0 5.394-4.388 9.855-9.788 9.855z"/></svg>
+              </a>
+              <!-- Email -->
+              <a href="mailto:contact@farmardss.com" class="social-btn social-email" aria-label="Email us">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              </a>
+              <!-- GitHub -->
+              <a href="https://github.com" target="_blank" rel="noopener" class="social-btn social-gh" aria-label="GitHub">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+              </a>
+            </div>
+            <p class="footer-email-text">contact@farmardss.com</p>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <span>&copy; <?php echo date('Y'); ?> Farmar's DSS &mdash; Built for Sri Lankan farmers.</span>
+          <span>Powered by <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a> weather API.</span>
+        </div>
+      </footer>
 
       <div class="toast" id="toast" aria-live="polite"></div>
 
