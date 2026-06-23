@@ -1,20 +1,66 @@
 :root {
-  color-scheme: dark;
+  color-scheme: light;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  --bg: #050f07;
-  --page: #071209;
-  --surface: rgba(255, 255, 255, 0.07);
-  --surface-soft: rgba(255, 255, 255, 0.04);
-  --border: rgba(255, 255, 255, 0.12);
-  --text: #dff0e1;
-  --muted: #7a9e7e;
-  --accent: #22c55e;
-  --accent-dark: #16a34a;
-  --accent-soft: rgba(34, 197, 94, 0.14);
+  /* Color palette – white background with forest‑green typography */
+  --bg: #ffffff;
+  --page: #f0fff0;
+  --surface: rgba(255, 255, 255, 0.85);
+  --surface-soft: rgba(200, 230, 200, 0.2);
+  --border: rgba(34, 139, 34, 0.25);
+  --text: #228B22; /* forest green */
+  --muted: #68a068;
+  --accent: #1e7b1e;
+  --accent-dark: #166416;
+  --accent-soft: rgba(34, 139, 34, 0.12);
   --warning: #fbbf24;
-  --danger: #f87171;
-  --shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --danger: #e03d31;
+  --shadow: 0 12px 36px rgba(0, 0, 0, 0.15);
+  /* Glass‑morphism helper */
+  --glass-bg: rgba(255, 255, 255, 0.45);
+  --glass-border: rgba(255, 255, 255, 0.3);
 }
+
+/* Global body – white background with subtle textured gradient */
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-smoothing: antialiased;
+}
+
+/* Glass‑panel – Apple‑style translucent card */
+.glass-panel {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.glass-panel:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.2);
+}
+
+/* Subtle entry animation for panels */
+@keyframes fadeSlideIn {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.glass-panel {
+  animation: fadeSlideIn 0.6s ease-out forwards;
+}
+
+/* Adjust auth cards to use glass style */
+.auth-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
 
 * {
   box-sizing: border-box;
@@ -28,9 +74,9 @@ body {
   margin: 0;
   min-height: 100vh;
   background:
-    radial-gradient(ellipse at 15% 20%, rgba(34,197,94,0.10) 0%, transparent 50%),
-    radial-gradient(ellipse at 85% 80%, rgba(22,163,74,0.07) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 110%, rgba(16,185,129,0.06) 0%, transparent 45%),
+    radial-gradient(ellipse at 15% 20%, rgba(197, 224, 207, 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 80%, rgba(178, 198, 185, 0.07) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 110%, rgba(164, 184, 177, 0.06) 0%, transparent 45%),
     linear-gradient(160deg, #040c06 0%, #071609 45%, #040c06 100%);
   background-attachment: fixed;
   color: var(--text);
@@ -309,10 +355,18 @@ button:disabled {
 
 .panel,
 .metric-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 8px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   box-shadow: var(--shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.panel:hover,
+.metric-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.2);
 }
 
 .panel {
@@ -674,10 +728,17 @@ td {
   max-height: 90vh;
   overflow-y: auto;
   padding: 25px;
-  border-radius: 8px;
-  background: rgba(8, 22, 11, 0.97);
-  border: 1px solid rgba(34, 197, 94, 0.18);
-  box-shadow: 0 24px 64px rgba(0,0,0,0.75), inset 0 1px 0 rgba(255,255,255,0.05);
+  border-radius: 12px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: var(--shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.modal-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.2);
 }
 
 .modal-close {
