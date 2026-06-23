@@ -155,13 +155,13 @@ If your MySQL password is different, update `db.php`.
 
 ## Team 4
 
-- N. Arsh – TRI/IT/2025/F/06 ( C )
+- N. Arsh – TRI/IT/2025/F/06 
 - M.A.M. Atheef – TRI/IT/2025/F/29
 - E. Caleb – TRI/IT/2025/F/39
 - A.N.R. Ayyas – TRI/IT/2025/F/54
 - M.S.S. Simar – TRI/IT/2025/F/82
 
-- S.Sanusiyajini – TRI/IT/2025/F/16
+- S.Sanusiyajini – TRI/IT/2025/F/16 ( C )
 - N. Sajera – TRI/IT/2025/F/65 ( V.C )
 - M.N.F. Nafla – TRI/IT/2025/F/77 
 - A.F. Farhana – TRI/IT/2025/F/94
